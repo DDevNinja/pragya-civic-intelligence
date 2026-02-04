@@ -1,17 +1,37 @@
 "use client";
 
 import { CircleMarker, Popup } from "react-leaflet";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { mockZones } from "../../data/mockMapData";
 import { getZoneColor } from "../../utils/severity";
+import { useCity } from "../../context/CityContext";
+
+type Zone = {
+  id: number;
+  area: string;
+  city: string;
+  severity: string;
+  issues: number;
+  lat: number;
+  lng: number;
+};
 
 export default function RiskZoneLayer() {
+  const [zones, setZones] = useState<Zone[]>([]);
   const searchParams = useSearchParams();
   const selectedArea = searchParams.get("area");
+  const { city } = useCity(); // 🌍 GLOBAL CITY
+
+  // 🔥 Fetch zones based on selected city
+  useEffect(() => {
+    fetch(`/api/map?city=${city}`)
+      .then((res) => res.json())
+      .then((data) => setZones(data.data));
+  }, [city]);
 
   return (
     <>
-      {mockZones.map((zone) => {
+      {zones.map((zone) => {
         const isActive = selectedArea === zone.area;
 
         return (
@@ -22,14 +42,14 @@ export default function RiskZoneLayer() {
             pathOptions={{
               color: isActive ? "blue" : getZoneColor(zone.severity),
               fillColor: getZoneColor(zone.severity),
-              fillOpacity: isActive ? 0.9 : 0.6,
+              fillOpacity: 0.6,
             }}
           >
             <Popup>
               <div className="text-sm">
                 <p className="font-semibold">{zone.area}</p>
+                <p>{zone.city}</p>
                 <p>Issues: {zone.issues}</p>
-                <p>Status: {zone.severity.toUpperCase()}</p>
               </div>
             </Popup>
           </CircleMarker>

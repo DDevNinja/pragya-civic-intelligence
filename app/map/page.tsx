@@ -16,6 +16,7 @@
 
 import CityMap from "../Components/map/CityMap";
 import MapLegend from "../Components/map/MapLegend";
+import CitySelector from "../Components/common/CitySelector";
 
 export default function MapPage() {
   return (
@@ -23,6 +24,7 @@ export default function MapPage() {
       <h1 className="text-xl md:text-2xl font-bold mb-4">
         City Risk Heatmap
       </h1>
+    <CitySelector />
 
       <CityMap />
       <MapLegend />

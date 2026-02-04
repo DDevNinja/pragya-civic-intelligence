@@ -1,19 +1,4 @@
 "use client";
-
-import IssuesList from "../Components/issues/IssuesList";
-import CitySelector from "../Components/common/CitySelector";
-
-export default function IssuesPage() {
-  return (
-    <main className="p-4 md:p-6 lg:p-8 max-w-4xl mx-auto">
-      <h1 className="text-xl md:text-2xl font-bold mb-4">
-        City Issues
-      </h1>
-      <CitySelector />
-      <IssuesList />
-    </main>
-  );
-}
 import { createContext, useContext, useState } from "react";
 
 type CityContextType = {
